@@ -10,7 +10,7 @@ script:
 
 before_script:
   - git clone -q https://github.com/phalcon/cphalcon.git
-  - (cd cphalcon/build; ./install && phpenv config-add ../../tests/phalcon.ini)
+  - (cd cphalcon/build; ./travis-install && phpenv config-add ../../tests/phalcon.ini)
   - wget http://getcomposer.org/composer.phar
   - php composer.phar self-update
   - php composer.phar install
