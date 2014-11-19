@@ -10,11 +10,11 @@ use Jowy\Phrest\Transformers\KeyTransformer;
 /**
  * @RoutePrefix("/v1/key")
  * @Api(level=1,
-limits={
-"key" : {
-"increment" : "1 day", "limit" : 1000}
-}
-)
+    limits={
+    "key" : {
+    "increment" : "1 day", "limit" : 1000}
+    }
+  )
  */
 class KeyController extends Controller
 {
