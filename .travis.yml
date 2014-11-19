@@ -6,7 +6,7 @@ php:
 
 script:
   - vendor/bin/codecept build
-  - vendor/bin/codecpet run
+  - vendor/bin/codecept run
 
 before_script:
   - wget http://getcomposer.org/composer.phar
