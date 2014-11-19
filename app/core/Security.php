@@ -17,7 +17,6 @@ class Security extends Plugin
 {
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
-        xdebug_break();
         try {
             $apiKey = $this->request->getHeader("HTTP_X_API_KEY");
             $key = ApiKeysModel::findFirst("key = '{$apiKey}'");
