@@ -8,7 +8,7 @@ class Auth
 {
     public static function create($strategy)
     {
-        $class = "Jowy\\Phrest\\Core\\Auth\\Auth" . ucwords($strategy);
+        $class = "\\Jowy\\Phrest\\Core\\Auth\\Auth" . ucwords($strategy);
 
         if (class_exists($class)) {
             return new $class();

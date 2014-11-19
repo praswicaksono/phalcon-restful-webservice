@@ -15,5 +15,10 @@
         "robmorgan/phinx": "*",
         "codeception/mockery-module": "~0.2",
         "ircmaxell/random-lib": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jowy\\Phrest\\": "app/"
+        }
     }
 }
