@@ -1,0 +1,14 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+
+script:
+  - vendor/bin/codecept build
+  - vendor/bin/codecpet run
+
+before_script:
+  - wget http://getcomposer.org/composer.phar
+  - php composer.phar self-update
+  - php composer.phar install
