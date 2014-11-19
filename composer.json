@@ -1,0 +1,19 @@
+{
+    "name": "jowy/phalcon-restful-webservice",
+    "description": "Phalcon RESTful Webservice",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Prasetyo Wicaksono",
+            "email": "prasetyo@nanomit.es"
+        }
+    ],
+    "require": {
+        "ellipsesynergie/api-response": "0.7.0",
+        "codeception/codeception": "*",
+        "robmorgan/phinx": "*",
+        "codeception/mockery-module": "~0.2",
+        "ircmaxell/random-lib": "~1.0"
+    }
+}
