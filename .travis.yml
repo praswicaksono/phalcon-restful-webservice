@@ -9,6 +9,8 @@ script:
   - vendor/bin/codecept run
 
 before_script:
+  - git clone -q https://github.com/phalcon/cphalcon.git
+  - (cd cphalcon/build; sudo ./install && phpenv config-add ../../tests/phalcon.ini)
   - wget http://getcomposer.org/composer.phar
   - php composer.phar self-update
   - php composer.phar install
