@@ -6,7 +6,7 @@ $loader = new \Phalcon\Loader();
 
 $loader->registerNamespaces(
     [
-        "Jowy\\Phrest" => __DIR__ . "/../app"
+        "Jowy\\Phrest" => __DIR__ . "/../../app"
     ],
     true
 )->register();
@@ -16,7 +16,7 @@ $di = new \Phalcon\DI\FactoryDefault();
 $di->setShared(
     "config",
     function () {
-        require __DIR__ . "/../app/config/config.php";
+        require __DIR__ . "/../../app/config/config.php";
         return new \Phalcon\Config($config);
     }
 );
@@ -50,7 +50,7 @@ $di->set(
     function () {
         $router = new \Phalcon\Mvc\Router\Annotations(false);
 
-        $files = array_diff(scandir(__DIR__ . "/../app/controllers/"), array('..', '.'));
+        $files = array_diff(scandir(__DIR__ . "/../../app/controllers/"), array('..', '.'));
 
         foreach ($files as $file) {
             $file = array_slice(preg_split('/(?=[A-Z])/', $file), 1);
