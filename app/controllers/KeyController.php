@@ -22,6 +22,7 @@ class KeyController extends Controller
      * @Get("/")
      * @Limit({"increment": "1 hour", "limit": 50});
      * @Auth("basic")
+     * @Whitelist()
      */
     public function indexAction()
     {

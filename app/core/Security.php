@@ -8,6 +8,7 @@ use Jowy\Phrest\Models\ApiLogsModel;
 use Jowy\Phrest\Models\ApiKeysModel;
 use Phalcon\Exception as PhalconException;
 use Jowy\Phrest\Core\Limits\Key;
+use Jowy\Phrest\Core\Whitelist;
 use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\User\Plugin;
@@ -41,6 +42,10 @@ class Security extends Plugin
                 $auth = $methodAnnotation->get("Auth")->getArguments();
                 $class = "Jowy\\Phrest\\Core\\Auth\\Auth" . ucfirst($auth[0]);
                 $class::get()->auth();
+            }
+
+            if ($methodAnnotation->has("Whitelist")) {
+                Whitelist::get($this->request->getClientAddress())->check();
             }
 
             // check API key level to access this method

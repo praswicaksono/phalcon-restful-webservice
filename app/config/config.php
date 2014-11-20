@@ -11,6 +11,10 @@ $config = [
     "auth" => [
         "username" => "jowy",
         "password" => "Blink182"
+    ],
+    "whitelist" => [
+        "127.0.0.1",
+        "127.0.0.2"
     ]
 ];
 

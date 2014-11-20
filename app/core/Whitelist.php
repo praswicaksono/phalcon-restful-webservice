@@ -26,6 +26,11 @@ class Whitelist extends Component
 
         return true;
     }
+
+    public static function get($ip)
+    {
+        return new self($ip);
+    }
 }
 
 // EOF
