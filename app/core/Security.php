@@ -15,8 +15,6 @@ class Security extends Plugin
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
         try {
-            xdebug_break();
-
             // read class annotation
             $class_annotation = $this->annotations->get($dispatcher->getHandlerClass())->getClassAnnotations();
             $api_annotation = $class_annotation->get("Api");
@@ -47,21 +45,11 @@ class Security extends Plugin
             }
 
             // write logs to db
-            $params = [];
-            if ($this->request->isGet() || $this->request->isDelete()) {
-                $params = $this->request->get();
-            } elseif ($this->request->isPost()) {
-                $params = $this->request->getPost();
-            } elseif ($this->request->isPut()) {
-                $params = $this->request->getPut();
-            }
-
             $engine->log(
                 $key->getApiKeyId(),
                 $this->request->getClientAddress(),
                 $this->request->getMethod(),
-                $this->request->get("_url"),
-                $params
+                $this->request->get("_url")
             );
 
         } catch (PhalconException $e) {

@@ -61,8 +61,17 @@ class Engine extends Injectable
         )->checkLimit();
     }
 
-    public function log($key_id, $ip_address, $http_method, $route, $params)
+    public function log($key_id, $ip_address, $http_method, $route)
     {
+        $params = [];
+        if ($this->request->isGet() || $this->request->isDelete()) {
+            $params = $this->request->get();
+        } elseif ($this->request->isPost()) {
+            $params = $this->request->getPost();
+        } elseif ($this->request->isPut()) {
+            $params = $this->request->getPut();
+        }
+
         $logs = new ApiLogsModel();
         $logs->setApiKeyId($key_id);
         $logs->setIpAddress($ip_address);
