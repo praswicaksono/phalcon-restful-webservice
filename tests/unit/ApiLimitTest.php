@@ -40,7 +40,7 @@ class ApiLimitTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertTrue(Key::get($this->key, "-1 day", 11)->checkLimit());
         } catch (\Phalcon\Exception $e) {
-            $this->assertNotEquals("API key has reached limit", $e->getMessage());
+            $this->assertNotEquals("Limit reached", $e->getMessage());
         }
     }
 
@@ -49,16 +49,16 @@ class ApiLimitTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertFalse(Key::get($this->key, "-1 day", 9)->checkLimit());
         } catch (\Phalcon\Exception $e) {
-            $this->assertEquals("API key has reached limit", $e->getMessage());
+            $this->assertEquals("Limit reached", $e->getMessage());
         }
     }
 
     public function testMethodLimit()
     {
         try {
-            $this->assertTrue(Method::get($this->key, "indexAction", "-1 hour", 11)->checkLimit());
+            $this->assertTrue(Method::get($this->key, "/v1/key", "POST", "-1 day", 11)->checkLimit());
         } catch (\Phalcon\Exception $e) {
-            $this->assertNotEquals("API key has reached limit", $e->getMessage());
+            $this->assertNotEquals("Limit reached", $e->getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ class ApiLimitTest extends \PHPUnit_Framework_TestCase
         try {
             $this->assertFalse(Method::get($this->key, "/v1/key", "POST", "-1 day", 9)->checkLimit());
         } catch (\Phalcon\Exception $e) {
-            $this->assertEquals("API key has reached limit", $e->getMessage());
+            $this->assertEquals("Limit reached", $e->getMessage());
         }
     }
 

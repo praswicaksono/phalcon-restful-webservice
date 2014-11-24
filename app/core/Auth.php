@@ -3,6 +3,7 @@
 
 namespace Jowy\Phrest\Core;
 
+use Phalcon\Exception as PhalconException;
 
 class Auth
 {
@@ -14,7 +15,7 @@ class Auth
             return new $class();
         }
 
-        throw new \Phalcon\Exception("Internal error", 500);
+        throw new PhalconException("Internal error", 500);
     }
 }
 

@@ -3,82 +3,48 @@
 
 namespace Jowy\Phrest\Core;
 
-use Jowy\Phrest\Core\Limits\Method;
-use Jowy\Phrest\Models\ApiLogsModel;
-use Jowy\Phrest\Models\ApiKeysModel;
-use Phalcon\Exception as PhalconException;
-use Jowy\Phrest\Core\Limits\Key;
-use Jowy\Phrest\Core\Whitelist;
+
 use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\User\Plugin;
-use Jowy\Phrest\Core\Exception\InvalidAuthException;
+use Jowy\Phrest\Core\Engine as SecurityEngine;
+use Jowy\Phrest\Models\ApiLogsModel;
+use Phalcon\Exception as PhalconException;
 
 class Security extends Plugin
 {
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
         try {
-            $apiKey = $this->request->getHeader("HTTP_X_API_KEY");
-            $key = ApiKeysModel::findFirst("key = '{$apiKey}'");
-
-            // check if API key is valid
-            if (!$key) {
-                throw new PhalconException("Invalid API Key");
-            }
+            xdebug_break();
 
             // read class annotation
-            $classAnnotation = $this->annotations->get($dispatcher->getHandlerClass())->getClassAnnotations();
-            $classInfo = $classAnnotation->get("Api");
+            $class_annotation = $this->annotations->get($dispatcher->getHandlerClass())->getClassAnnotations();
+            $api_annotation = $class_annotation->get("Api");
 
             // read method annotation
-            $methodAnnotation = $this->annotations->getMethod(
+            $method_annotation = $this->annotations->getMethod(
                 $dispatcher->getHandlerClass(),
                 $dispatcher->getActiveMethod()
             );
 
-            // check if method has auth annotation
-            if ($methodAnnotation->has("Auth")) {
-                $auth = $methodAnnotation->get("Auth")->getArguments();
-                $class = "Jowy\\Phrest\\Core\\Auth\\Auth" . ucfirst($auth[0]);
-                $class::get()->auth();
-            }
+            $engine = new SecurityEngine();
 
-            if ($methodAnnotation->has("Whitelist")) {
-                Whitelist::get($this->request->getClientAddress())->check();
-            }
+            // check API key
+            $key = $engine->checkKeyLevel($this->request->getHeader("HTTP_X_API_KEY"), $api_annotation);
 
-            // check API key level to access this method
-            if ($key->getLevel() < $classInfo->getNamedArgument("level")) {
-                throw new PhalconException("Unauthorized");
-            }
+            // check authentication if exist
+            $engine->checkAuth($method_annotation);
 
-            // check if API key has ignore limit flag
-            if (!$key->getIgnoreLimit()) {
-                if ($classInfo->hasNamedArgument("limits")) {
-                    $limits = $classInfo->getNamedArgument("limits");
+            // check IP whitelist
+            $engine->checkWhitelist($method_annotation);
 
-                    // check limit for key to access all method in class
-                    if (isset($limits["key"])) {
-                        Key::get($key, "-" . $limits["key"]["increment"], $limits["key"]["limit"])->checkLimit();
-                    }
+            $hasLimit = $api_annotation->hasNamedArgument("limits") || $method_annotation->has("Limit");
 
-                    // check limit for key to access specific method in class
-                    if ($methodAnnotation->has("Limit")) {
-                        $limit = $methodAnnotation->get("Limit")->getArguments();
-
-                        $increment = (isset($limit[0]["increment"])) ? "-" . $limit[0]["increment"] : "-1 hour";
-                        $limit = (isset($limit[0]["limit"])) ? $limit[0]["limit"] : 100;
-
-                        Method::get(
-                            $key,
-                            $this->request->get("_url"),
-                            $this->request->getMethod(),
-                            $increment,
-                            $limit
-                        )->checkLimit();
-                    }
-                }
+            // check limit
+            if (!$key->getIgnoreLimit() && $hasLimit) {
+                $engine->checkKeyLimitOnClass($key, $api_annotation->getNamedArgument("limits"));
+                $engine->checkMethodLimitByKey($key, $method_annotation->get("Limit")->getArguments());
             }
 
             // write logs to db
@@ -90,11 +56,8 @@ class Security extends Plugin
             $logs->setParam(serialize($dispatcher->getParams()));
             $logs->save();
 
-        } catch (InvalidAuthException $e) {
-            $this->apiResponse->errorUnauthorized($e->getMessage());
-            return false;
         } catch (PhalconException $e) {
-            $this->apiResponse->errorUnauthorized($e->getMessage());
+            $this->apiResponse->withError($e->getMessage(), $e->getCode());
             return false;
         }
 

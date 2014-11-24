@@ -17,10 +17,10 @@ class AuthBasic extends Component implements AuthInterface
             if ($_SERVER["PHP_AUTH_USER"] != $config["auth"]["username"] ||
                 $_SERVER["PHP_AUTH_PW"] != $config["auth"]["password"]
             ) {
-                throw new InvalidAuthException("Unauthorized", 401);
+                throw new InvalidAuthException("Not authorized", 401);
             }
         } else {
-            throw new InvalidAuthException("Unauthorized", 401);
+            throw new InvalidAuthException("Not authorized", 401);
         }
 
 

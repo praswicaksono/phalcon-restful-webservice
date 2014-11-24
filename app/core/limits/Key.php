@@ -5,7 +5,7 @@ namespace Jowy\Phrest\Core\Limits;
 
 
 use Phalcon\Mvc\User\Component;
-use Phalcon\Exception as PhalconException;
+use Jowy\Phrest\Core\Exception\LimitReachedException;
 
 class Key extends Component
 {
@@ -15,7 +15,7 @@ class Key extends Component
 
     protected $limit;
 
-    public function __construct($key, $increment = "-1 day", $limit = 10000)
+    public function __construct($key, $increment = 0, $limit = 0)
     {
         $this->key = $key;
         $this->increment = $increment;
@@ -24,15 +24,17 @@ class Key extends Component
 
     public function checkLimit()
     {
-        $date = date("Y-m-d H:i:s", strtotime($this->increment));
+        if (!$this->increment == 0 && !$this->limit == 0) {
+            $date = date("Y-m-d H:i:s", strtotime($this->increment));
 
-        $logs = $this->key->getApiLogs("created_at > '{$date}'");
+            $logs = $this->key->getApiLogs("created_at > '{$date}'");
 
-        if (count($logs) >= $this->limit) {
-            throw new PhalconException("API key has reached limit");
+            if (count($logs) >= $this->limit) {
+                throw new LimitReachedException("Limit reached", 503);
+            }
+
+            return true;
         }
-
-        return true;
     }
 
     public static function get($key, $increment = "-1 day", $limit = 10000)

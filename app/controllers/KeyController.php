@@ -10,18 +10,17 @@ use Jowy\Phrest\Transformers\KeyTransformer;
 /**
  * @RoutePrefix("/v1/key")
  * @Api(level=1,
-    limits={
-    "key" : {
-    "increment" : "1 day", "limit" : 1000}
-    }
-  )
+ *   limits={
+ *   "key" : {
+ *   "increment" : "-1 day", "limit" : 1000}
+ *   }
+ * )
  */
 class KeyController extends Controller
 {
     /**
      * @Get("/")
-     * @Limit({"increment": "1 hour", "limit": 50});
-     * @Auth("basic")
+     * @Limit({"increment": "-1 hour", "limit": 50});
      * @Whitelist()
      */
     public function indexAction()
@@ -33,7 +32,7 @@ class KeyController extends Controller
 
     /**
      * @Put("/")
-     * @Limit({"increment": "1 hour", "limit": 50});
+     * @Limit({"increment": "-1 hour", "limit": 50});
      */
     public function editAction()
     {
@@ -53,7 +52,7 @@ class KeyController extends Controller
 
     /**
      * @Post("/")
-     * @Limit({"increment": "1 hour", "limit": 50});
+     * @Limit({"increment": "-1 hour", "limit": 50});
      */
     public function addAction()
     {
@@ -75,7 +74,7 @@ class KeyController extends Controller
 
     /**
      * @Delete("/")
-     * @Limit({"increment": "1 hour", "limit": 50});
+     * @Limit({"increment": "-1 hour", "limit": 50});
      */
     public function deleteAction()
     {
