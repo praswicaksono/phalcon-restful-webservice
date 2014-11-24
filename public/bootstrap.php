@@ -14,7 +14,7 @@ $di = new \Phalcon\DI\FactoryDefault();
 $di->setShared(
     "config",
     function () {
-        require __DIR__ . "/../app/config/config.php";
+        require __DIR__ . "/../app/Config/Config.php";
         return new \Phalcon\Config($config);
     }
 );
