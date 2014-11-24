@@ -1,4 +1,4 @@
-Phalcon Restful Webservice [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Atriedes/phalcon-restful-webservice/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Atriedes/phalcon-restful-webservice/?branch=master)
+Phalcon Restful Webservice [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Atriedes/phalcon-restful-webservice/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Atriedes/phalcon-restful-webservice/?branch=master) [![Build Status](https://travis-ci.org/Atriedes/phalcon-restful-webservice.svg?branch=master)](https://travis-ci.org/Atriedes/phalcon-restful-webservice)
 ===
 
 Just another Phalcon RESTful webservice. It use Phalcon annotation routing for advanced and flexible routing configuration. 
