@@ -4,7 +4,7 @@
 namespace Jowy\Phrest\Core;
 
 use EllipseSynergie\ApiResponse\AbstractResponse;
-use Phalcon\Http\Response as PhalconResponse;
+use Phalcon\Http\ResponseInterface;
 
 class Response extends AbstractResponse
 {
@@ -31,7 +31,7 @@ class Response extends AbstractResponse
         return $this->phalconResponse->send();
     }
 
-    public function setPhalconResponse(\Phalcon\Http\ResponseInterface $phalconResponse)
+    public function setPhalconResponse(ResponseInterface $phalconResponse)
     {
         $this->phalconResponse = $phalconResponse;
     }
