@@ -55,3 +55,5 @@ class ApiLogs extends AbstractMigration
         $this->dropTable("api_logs");
     }
 }
+
+//EOF

@@ -38,4 +38,3 @@ class Response extends AbstractResponse
 }
 
 // EOF
- 

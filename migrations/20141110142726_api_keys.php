@@ -52,3 +52,5 @@ class ApiKeys extends AbstractMigration
         $this->dropTable("api_keys");
     }
 }
+
+//EOF
