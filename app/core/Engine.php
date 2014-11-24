@@ -6,11 +6,9 @@ namespace Jowy\Phrest\Core;
 
 use Phalcon\DI\Injectable;
 use Jowy\Phrest\Models\ApiKeysModel;
-
 use Jowy\Phrest\Core\Whitelist as WhitelistSecurity;
 use Jowy\Phrest\Core\Limits\Key;
 use Jowy\Phrest\Core\Limits\Method;
-
 use Jowy\Phrest\Core\Exception\InvalidApiKey;
 
 class Engine extends Injectable
