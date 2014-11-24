@@ -8,7 +8,6 @@ use Phalcon\Dispatcher;
 use Phalcon\Events\Event;
 use Phalcon\Mvc\User\Plugin;
 use Jowy\Phrest\Core\Engine as SecurityEngine;
-use Jowy\Phrest\Models\ApiLogsModel;
 use Phalcon\Exception as PhalconException;
 
 class Security extends Plugin
@@ -48,13 +47,22 @@ class Security extends Plugin
             }
 
             // write logs to db
-            $logs = new ApiLogsModel();
-            $logs->setApiKeyId($key->getApiKeyId());
-            $logs->setIpAddress($this->request->getClientAddress());
-            $logs->setMethod($this->request->getMethod());
-            $logs->setRoute($this->request->get("_url"));
-            $logs->setParam(serialize($dispatcher->getParams()));
-            $logs->save();
+            $params = [];
+            if ($this->request->isGet() || $this->request->isDelete()) {
+                $params = $this->request->get();
+            } elseif ($this->request->isPost()) {
+                $params = $this->request->getPost();
+            } elseif ($this->request->isPut()) {
+                $params = $this->request->getPut();
+            }
+
+            $engine->log(
+                $key->getApiKeyId(),
+                $this->request->getClientAddress(),
+                $this->request->getMethod(),
+                $this->request->get("_url"),
+                $params
+            );
 
         } catch (PhalconException $e) {
             $this->apiResponse->withError($e->getMessage(), $e->getCode());

@@ -6,6 +6,7 @@ namespace Jowy\Phrest\Core;
 
 use Phalcon\DI\Injectable;
 use Jowy\Phrest\Models\ApiKeysModel;
+use Jowy\Phrest\Models\ApiLogsModel;
 use Jowy\Phrest\Core\Whitelist as WhitelistSecurity;
 use Jowy\Phrest\Core\Limits\Key;
 use Jowy\Phrest\Core\Limits\Method;
@@ -58,6 +59,17 @@ class Engine extends Injectable
             $method_annotation[0]["increment"],
             $method_annotation[0]["limit"]
         )->checkLimit();
+    }
+
+    public function log($key_id, $ip_address, $http_method, $route, $params)
+    {
+        $logs = new ApiLogsModel();
+        $logs->setApiKeyId($key_id);
+        $logs->setIpAddress($ip_address);
+        $logs->setMethod($http_method);
+        $logs->setRoute($route);
+        $logs->setParam(serialize($params));
+        $logs->save();
     }
 }
 
