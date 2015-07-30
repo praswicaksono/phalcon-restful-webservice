@@ -48,7 +48,7 @@ $di->set(
     function () {
         $router = new \Phalcon\Mvc\Router\Annotations(false);
 
-        $files = array_diff(scandir(__DIR__ . "/../app/controllers/"), array('..', '.'));
+        $files = array_diff(scandir(__DIR__ . "/../app/Controllers/"), array('..', '.'));
 
         foreach ($files as $file) {
             $file = array_slice(preg_split('/(?=[A-Z])/', $file), 1);
